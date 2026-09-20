@@ -1,42 +1,33 @@
 close all
 clear all
 clc
-%% raidþiø pavyzdþiø nuskaitymas ir poþymiø skaièiavimas
-%% read the image with hand-written characters
-pavadinimas = 'train_data.png';
-pozymiai_tinklo_mokymui = pozymiai_raidems_atpazinti(pavadinimas, 8);
-%% Atpaþintuvo kûrimas
-%% Development of character recognizer
-% poþymiai ið celiø masyvo perkeliami á matricà
-% take the features from cell-type variable and save into a matrix-type variable
+%% raidziu pavyzdzio nuskaitymas ir pozymio skaiciavimas
+pavadinimas = 'train.jpg';
+pozymiai_tinklo_mokymui = pozymiai_raidems_atpazinti(pavadinimas,8);
+%% Atpazintuvo kurimas
+% pozymiai is celiu masyvo perkeliami i matrica
 P = cell2mat(pozymiai_tinklo_mokymui);
-% sukuriama teisingø atsakymø matrica: 11 raidþiø, 8 eilutës mokymui
-% create the matrices of correct answers for each line (number of matrices = number of symbol lines)
+% sukuriama teisingu atsakymu matrica: 11 raidziu, 8 eilutes mokymui
 T = [eye(11), eye(11), eye(11), eye(11), eye(11), eye(11), eye(11), eye(11)];
-% sukuriamas SBF tinklas duotiems P ir T sàryðiams
+% sukuriamas SBF tinklas duotiems P ir T sarysiams
 % create an RBF network for classification with 13 neurons, and sigma = 1
 tinklas = newrb(P,T,0,1,13);
 
 %% Tinklo patikra | Test of the network (recognizer)
-% skaièiuojamas tinklo iðëjimas neþinomiems poþymiams
-% estimate output of the network for unknown symbols (row, that were not used during training)
+% skaiciuojamas tinklo isejimas nezinomiems pozymiams
 P2 = P(:,12:22);
 Y2 = sim(tinklas, P2);
-% ieðkoma, kuriame iðëjime gauta didþiausia reikðmë
-% find which neural network output gives maximum value
+% ieskoma, kuriame isejime gauta didziausia reiksme
 [a2, b2] = max(Y2);
+
 %% Rezultato atvaizdavimas
-%% Visualize result
-% apskaièiuosime raidþiø skaièiø - poþymiø P2 stulpeliø skaièiø
-% calculate the total number of symbols in the row
+% apskaiciuosime raidziu skaiciu - pozymiu P2 stulpeliu skaiciu
 raidziu_sk = size(P2,2);
-% rezultatà saugosime kintamajame 'atsakymas'
-% we will save the result in variable 'atsakymas'
+% rezultata saugosime kintamajame 'atsakymas'
 atsakymas = [];
 for k = 1:raidziu_sk
     switch b2(k)
         case 1
-            % the symbol here should be the same as written first symbol in your image
             atsakymas = [atsakymas, 'A'];
         case 2
             atsakymas = [atsakymas, 'B'];
@@ -61,30 +52,24 @@ for k = 1:raidziu_sk
     end
 end
 % pateikime rezultatà komandiniame lange
-% show the result in command window
 disp(atsakymas)
-% % figure(7), text(0.1,0.5,atsakymas,'FontSize',38)
-%% þodþio "KADA" poþymiø iðskyrimas 
-%% Extract features of the test image
-pavadinimas = 'test_kada.png';
+figure(7), text(0.1,0.5,atsakymas,'FontSize',38)
+%% zodzio "KADA" pozymio isskyrimas 
+pavadinimas = 'test_kada.jpg';
 pozymiai_patikrai = pozymiai_raidems_atpazinti(pavadinimas, 1);
 
-%% Raidþiø atpaþinimas
-%% Perform letter/symbol recognition
-% poþymiai ið celiø masyvo perkeliami á matricà
-% features from cell-variable are stored to matrix-variable
+%% Raidziu atpazinimas
+% pozymiai is celiu masyvo perkeliami i matrica
 P2 = cell2mat(pozymiai_patikrai);
-% skaièiuojamas tinklo iðëjimas neþinomiems poþymiams
-% estimating neuran network output for newly estimated features
+% skaiciuojamas tinklo isejimas nezinomiems pozymiams
 Y2 = sim(tinklas, P2);
-% ieðkoma, kuriame iðëjime gauta didþiausia reikðmë
-% searching which output gives maximum value
+% ieskoma, kuriame isejime gauta didziausia reiksme
 [a2, b2] = max(Y2);
+
 %% Rezultato atvaizdavimas | Visualization of result
-% apskaièiuosime raidþiø skaièiø - poþymiø P2 stulpeliø skaièiø
-% calculating number of symbols - number of columns
+% apskaiciuosime raidziu skaiciu - pozymiu P2 stulpeliu skaièiu
 raidziu_sk = size(P2,2);
-% rezultatà saugosime kintamajame 'atsakymas'
+% rezultata saugosime kintamajame 'atsakymas'
 atsakymas = [];
 for k = 1:raidziu_sk
     switch b2(k)
@@ -112,25 +97,25 @@ for k = 1:raidziu_sk
             atsakymas = [atsakymas, 'J'];
     end
 end
-% pateikime rezultatà komandiniame lange
-% disp(atsakymas)
+% pateikime rezultata komandiniame lange
+disp(atsakymas)
 figure(8), text(0.1,0.5,atsakymas,'FontSize',38), axis off
-%% þodþio "FIKCIJA" poþymiø iðskyrimas 
-%% extract features for next/another test image
-pavadinimas = 'test_fikcija.png';
+
+%% zodzio "FIKCIJA" pozymiu isskyrimas 
+pavadinimas = 'test_fikcija.jpg';
 pozymiai_patikrai = pozymiai_raidems_atpazinti(pavadinimas, 1);
 
-%% Raidþiø atpaþinimas
-% poþymiai ið celiø masyvo perkeliami á matricà
+%% Raidziu atpazinimas
+% pozymiai is celiu masyvo perkeliami i matrica
 P2 = cell2mat(pozymiai_patikrai);
-% skaièiuojamas tinklo iðëjimas neþinomiems poþymiams
+% skaiciuojamas tinklo isejimas neþinomiems pozymiams
 Y2 = sim(tinklas, P2);
-% ieðkoma, kuriame iðëjime gauta didþiausia reikðmë
+% ieskoma, kuriame isejime gauta didziausia reiksme
 [a2, b2] = max(Y2);
 %% Rezultato atvaizdavimas
-% apskaièiuosime raidþiø skaièiø - poþymiø P2 stulpeliø skaièiø
+% apskaiciuosime raidziu skaiciu - pozymiu P2 stulpeliu skaiciu
 raidziu_sk = size(P2,2);
-% rezultatà saugosime kintamajame 'atsakymas'
+% rezultata saugosime kintamajame 'atsakymas'
 atsakymas = [];
 for k = 1:raidziu_sk
     switch b2(k)
@@ -158,7 +143,7 @@ for k = 1:raidziu_sk
             atsakymas = [atsakymas, 'J'];
     end
 end
-% pateikime rezultatà komandiniame lange
-% disp(atsakymas)
+% pateikime rezultata komandiniame lange
+disp(atsakymas)
 figure(9), text(0.1,0.5,atsakymas,'FontSize',38), axis off
 
